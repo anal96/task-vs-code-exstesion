@@ -1,0 +1,237 @@
+{
+  "name": "tasks",
+  "displayName": "Tasks",
+  "description": "Developer-native task manager inside VS Code",
+  "version": "0.1.0",
+  "publisher": "YOUR_PUBLISHER_NAME",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/vscode-tasks.git"
+  },
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "tasks",
+    "todo",
+    "productivity",
+    "developer"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "tasks-explorer",
+          "title": "Tasks",
+          "icon": "$(checklist)"
+        }
+      ]
+    },
+    "views": {
+      "tasks-explorer": [
+        {
+          "id": "tasksView",
+          "name": "Tasks List",
+          "icon": "$(checklist)"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "tasks.addTask",
+        "title": "Tasks: Add Task",
+        "icon": "$(add)"
+      },
+      {
+        "command": "tasks.completeTask",
+        "title": "Complete Task",
+        "icon": "$(check)"
+      },
+      {
+        "command": "tasks.addFromTemplate",
+        "title": "Tasks: Add from Template",
+        "icon": "$(layout)"
+      },
+      {
+        "command": "tasks.deleteTask",
+        "title": "Delete Task",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "tasks.refreshTasks",
+        "title": "Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "tasks.switchContext",
+        "title": "Tasks: Switch Context (Global/Workspace)",
+        "icon": "$(arrow-swap)"
+      },
+      {
+        "command": "tasks.clearCompleted",
+        "title": "Clear Completed Tasks",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "tasks.addFromSelection",
+        "title": "Tasks: Add to Tasks"
+      },
+      {
+        "command": "tasks.snoozeTask",
+        "title": "Snooze Task...",
+        "icon": "$(history)"
+      },
+      {
+        "command": "tasks.makeRecurring",
+        "title": "Make Recurring...",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "tasks.addSubtask",
+        "title": "Add Subtask",
+        "icon": "$(indent)"
+      },
+      {
+        "command": "tasks.linkTaskToCommit",
+        "title": "Tasks: Link Task to Commit",
+        "icon": "$(gist-new)"
+      }
+    ],
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "tasks.completeTask",
+          "when": "view == tasksView && viewItem == taskItem",
+          "group": "inline"
+        },
+        {
+          "command": "tasks.deleteTask",
+          "when": "view == tasksView && viewItem == taskItem",
+          "group": "inline"
+        },
+        {
+          "command": "tasks.snoozeTask",
+          "when": "view == tasksView && viewItem == taskItem",
+          "group": "time@1"
+        },
+        {
+          "command": "tasks.makeRecurring",
+          "when": "view == tasksView && viewItem == taskItem",
+          "group": "time@2"
+        },
+        {
+          "command": "tasks.addSubtask",
+          "when": "view == tasksView && viewItem == taskItem",
+          "group": "inline"
+        },
+        {
+          "command": "tasks.deleteTask",
+          "when": "view == tasksView && viewItem == taskItem",
+          "group": "danger@1"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "tasks.addTask",
+          "when": "view == tasksView",
+          "group": "navigation"
+        },
+        {
+          "command": "tasks.addFromTemplate",
+          "when": "view == tasksView",
+          "group": "navigation"
+        },
+        {
+          "command": "tasks.clearCompleted",
+          "when": "view == tasksView",
+          "group": "navigation"
+        },
+        {
+          "command": "tasks.refreshTasks",
+          "when": "view == tasksView",
+          "group": "navigation"
+        }
+      ],
+      "scm/title": [
+        {
+          "command": "tasks.linkTaskToCommit",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "tasks.addFromSelection",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Tasks",
+      "properties": {
+        "tasks.defaultPriority": {
+          "type": "string",
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ],
+          "default": "medium",
+          "description": "Default priority for new tasks."
+        },
+        "tasks.showCompleted": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show completed tasks in the Tree view."
+        },
+        "tasks.autoDeleteCompleted": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically delete tasks when they are marked as completed."
+        },
+        "tasks.branchAwareMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Store and display tasks specific to the current Git branch (only applies to Workspace context)."
+        },
+        "tasks.enableReminders": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable reminder notifications for tasks."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.109.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "typescript-eslint": "^8.54.0",
+    "eslint": "^9.39.2",
+    "esbuild": "^0.27.2",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.9.3",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}
